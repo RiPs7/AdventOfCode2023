@@ -9,6 +9,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.rips7.util.Util.time;
+
 public class MazeSolverExample {
 
   private static final String MAZE_INPUT =
@@ -52,9 +54,17 @@ public class MazeSolverExample {
   private static final int[][] NEIGHBOR_OFFSETS = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
   public static void main(String[] args) {
-    Util.time(MazeSolverExample::solveBFS);
-    Util.time(MazeSolverExample::solveDFS);
-    Util.time(MazeSolverExample::solveAStar);
+    System.out.println("--- BFS ---");
+    System.out.println(time(() -> {solveBFS(); return null;}).timeInfo());
+    System.out.println("-----------\n");
+
+    System.out.println("--- DFS ---");
+    System.out.println(time(() -> {solveDFS(); return null;}).timeInfo());
+    System.out.println("-----------\n");
+
+    System.out.println("--- A* ---");
+    System.out.println(time(() -> {solveAStar(); return null;}).timeInfo());
+    System.out.println("----------\n");
   }
 
   private static void solveBFS() {

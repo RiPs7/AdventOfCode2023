@@ -3,6 +3,7 @@ package com.rips7.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
+import java.util.concurrent.Callable;
 
 @SuppressWarnings("unused")
 public class Util {
@@ -38,28 +39,34 @@ public class Util {
     }
   }
 
-  public static void time(Runnable runnable) {
+  public static <T> TimedResult<T> time(Callable<T> runnable) {
     final long start = System.currentTimeMillis();
-    runnable.run();
+    final T res;
+    try {
+      res = runnable.call();
+    } catch (final Exception e) {
+      throw new RuntimeException(e);
+    }
     final long end = System.currentTimeMillis();
     final long diff = end - start;
     if (diff < 1_000) { // less than a second
-      printColor("Took %s ms.%n%n".formatted(diff), AnsiColor.GREEN);
+      return new TimedResult<>(res, "Took %s ms".formatted(diff));
     } else if (diff < 60_000) { // less than a minute
       final long seconds = diff / 1_000;
       final long millis = diff - (seconds * 1_000);
-      printColor("Took %s sec, %s ms.%n%n".formatted(seconds, millis), AnsiColor.GREEN);
+      return new TimedResult<>(res, "Took %s sec, %s ms".formatted(seconds, millis));
     } else {
       final long minutes = diff / 60_000;
       final long seconds = diff - (minutes * 60_000);
       final long millis = diff - seconds * 1_000;
-      printColor("Took %s min, %s sec, %s ms.%n%n".formatted(minutes, seconds, millis), AnsiColor.GREEN);
+      return new TimedResult<>(res, "Took %s min, %s sec, %s ms".formatted(minutes, seconds, millis));
     }
   }
 
-  @SuppressWarnings("SameParameterValue")
-  private static void printColor(String text, AnsiColor col) {
+  public static void printColor(String text, AnsiColor col) {
     System.out.printf("%s%s%s", col, text, AnsiColor.RESET);
   }
+
+  public record TimedResult<T>(T res, String timeInfo) {}
 
 }
