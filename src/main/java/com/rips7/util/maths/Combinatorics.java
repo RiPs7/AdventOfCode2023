@@ -9,6 +9,9 @@ import java.util.stream.IntStream;
 public class Combinatorics {
 
   public record Pair<L, R>(L left, R right) {
+    public static <L, R> Pair<L,R> of(L left, R right) {
+      return new Pair<>(left, right);
+    }
     @Override
     public String toString() {
       return "[%s,%s]".formatted(left, right);
