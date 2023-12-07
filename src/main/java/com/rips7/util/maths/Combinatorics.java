@@ -30,6 +30,12 @@ public class Combinatorics {
     return result;
   }
 
+  public static <T extends Comparable<T>> List<Pair<T, T>> consecutivePairs(final T[] input) {
+    return IntStream.range(0, input.length / 2)
+      .mapToObj(i -> Pair.of(input[2 * i], input[2 * i + 1]))
+      .toList();
+  }
+
   public static <T extends Comparable<T>> List<Pair<T, T>> orderedPairs(final T[] input) {
     Arrays.sort(input, Comparable::compareTo);
     return Arrays.stream(input)
