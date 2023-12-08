@@ -3,6 +3,9 @@ package com.rips7.util.maths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @SuppressWarnings("unused")
@@ -28,6 +31,11 @@ public class Combinatorics {
       nextPermutation = getNextPermutation(nextPermutation);
     }
     return result;
+  }
+
+  public static <T> Map<T, Long> frequencyMap(final T[] input) {
+    return Arrays.stream(input)
+      .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
   }
 
   public static <T extends Comparable<T>> List<Pair<T, T>> consecutivePairs(final T[] input) {

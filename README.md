@@ -11,3 +11,4 @@ Every solved puzzle will give a star 🌟.
 | [Day 4](https://adventofcode.com/2023/day/4) | [Day 4](src/main/resources/day4/description.md) | [Day4.java](src/main/java/com/rips7/day/Day4.java) | 🌟 🌟 |       
 | [Day 5](https://adventofcode.com/2023/day/5) | [Day 5](src/main/resources/day5/description.md) | [Day5.java](src/main/java/com/rips7/day/Day5.java) | 🌟 🌟 |       
 | [Day 6](https://adventofcode.com/2023/day/6) | [Day 6](src/main/resources/day6/description.md) | [Day6.java](src/main/java/com/rips7/day/Day6.java) | 🌟 🌟 |%       
+| [Day 7](https://adventofcode.com/2023/day/7) | [Day 7](src/main/resources/day7/description.md) | [Day7.java](src/main/java/com/rips7/day/Day7.java) | 🌟 🌟 |%       
