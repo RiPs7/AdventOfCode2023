@@ -2,6 +2,7 @@ package com.rips7.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 
@@ -31,7 +32,7 @@ public class Util {
     }
   }
 
-  public static String readResource(String filename) {
+  public static String readResource(final String filename) {
     try (InputStream in = Util.class.getResourceAsStream(filename)) {
       return new String(Objects.requireNonNull(in).readAllBytes());
     } catch (IOException e) {
@@ -39,7 +40,15 @@ public class Util {
     }
   }
 
-  public static <T> TimedResult<T> time(Callable<T> runnable) {
+  public static <T> T lastElement(final List<T> list) {
+    return list.isEmpty() ? null : list.get(list.size() - 1);
+  }
+
+  public static <T> T firstElement(final List<T> list) {
+    return list.isEmpty() ? null : list.get(0);
+  }
+
+  public static <T> TimedResult<T> time(final Callable<T> runnable) {
     final long start = System.currentTimeMillis();
     final T res;
     try {
@@ -63,7 +72,7 @@ public class Util {
     }
   }
 
-  public static void printColor(String text, AnsiColor col) {
+  public static void printColor(final String text, final AnsiColor col) {
     System.out.printf("%s%s%s", col, text, AnsiColor.RESET);
   }
 
