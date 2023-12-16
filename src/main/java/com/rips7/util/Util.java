@@ -12,6 +12,14 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unused")
 public class Util {
 
+  public record Vector2D<T>(T x, T y) {
+    public static <T> Vector2D<T> of(T x, T y) {
+      return new Vector2D<>(x, y);
+    }
+  }
+
+  public record Vector3D<T>(T x, T y, T z) {}
+
   public enum AnsiColor {
     RESET("\u001B[0m"),
     BLACK("\u001B[30m"),

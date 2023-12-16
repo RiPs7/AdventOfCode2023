@@ -15,6 +15,7 @@ public class Combinatorics {
     public static <L, R> Pair<L,R> of(L left, R right) {
       return new Pair<>(left, right);
     }
+
     @Override
     public String toString() {
       return "[%s,%s]".formatted(left, right);
@@ -38,10 +39,24 @@ public class Combinatorics {
       .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
   }
 
+  public static <T extends Comparable<T>> List<Pair<T, T>> consecutivePairs(final List<T> input) {
+    return IntStream.range(0, input.size() / 2)
+        .mapToObj(i -> Pair.of(input.get(2 * i), input.get(2 * i + 1)))
+        .toList();
+  }
+
   public static <T extends Comparable<T>> List<Pair<T, T>> consecutivePairs(final T[] input) {
     return IntStream.range(0, input.length / 2)
-      .mapToObj(i -> Pair.of(input[2 * i], input[2 * i + 1]))
-      .toList();
+        .mapToObj(i -> Pair.of(input[2 * i], input[2 * i + 1]))
+        .toList();
+  }
+
+  public static <T extends Comparable<T>> List<Pair<T, T>> orderedPairs(final List<T> input) {
+    final List<T> sortedInput = input.stream().sorted().toList();
+    return input.stream()
+        .flatMap(item1 -> input.stream()
+        .map(item2 -> Pair.of(item1, item2)))
+        .toList();
   }
 
   public static <T extends Comparable<T>> List<Pair<T, T>> orderedPairs(final T[] input) {
@@ -50,6 +65,16 @@ public class Combinatorics {
       .flatMap(item1 -> Arrays.stream(input)
         .map(item2 -> new Pair<>(item1, item2)))
       .toList();
+  }
+
+  public static <T extends Comparable<T>> List<Pair<T, T>> unorderedPairs(final List<T> input, final boolean distinct) {
+    final List<T> sortedInput = input.stream().sorted().toList();
+    return IntStream.range(0, distinct ? input.size() - 1 : input.size())
+        .mapToObj(i -> IntStream.range(distinct ? i + 1 : i, input.size())
+            .mapToObj(j -> new Pair<>(input.get(i), input.get(j)))
+            .toList())
+        .flatMap(List::stream)
+        .toList();
   }
 
   public static <T extends Comparable<T>> List<Pair<T, T>> unorderedPairs(final T[] input, final boolean distinct) {
