@@ -2,9 +2,12 @@ package com.rips7.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 public class Util {
@@ -74,6 +77,18 @@ public class Util {
 
   public static void printColor(final String text, final AnsiColor col) {
     System.out.printf("%s%s%s", col, text, AnsiColor.RESET);
+  }
+
+  public static <T> void print2DArray(final T[][] arr) {
+    print2DArray(arr, T::toString);
+  }
+
+  public static <T> void print2DArray(final T[][] arr, final Function<T, String> stringifier) {
+    System.out.println(Arrays.stream(arr)
+        .map(row -> Arrays.stream(row)
+            .map(stringifier)
+            .collect(Collectors.joining()))
+        .collect(Collectors.joining("\n")));
   }
 
   public record TimedResult<T>(T res, String timeInfo) {}

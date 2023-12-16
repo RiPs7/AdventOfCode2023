@@ -13,13 +13,21 @@ import java.util.function.Function;
 public class DFS<T> {
 
   public List<T> run(final T start, final T end, final Function<T, List<T>> neighborsGetter) {
+    return run(start, end, neighborsGetter, false);
+  }
+
+  public List<T> run(final T start, final T end, final Function<T, List<T>> neighborsGetter, final boolean isStartSameAsEnd) {
     final Stack<DFSNode<T>> frontier = new Stack<>();
     final Set<DFSNode<T>> closed = new HashSet<>();
 
     final DFSNode<T> startNode = node(start);
     final DFSNode<T> endNode = node(end);
 
-    frontier.add(startNode);
+    if (isStartSameAsEnd) {
+      neighborsGetter.apply(start).stream().map(DFS::node).peek(n -> n.parent = startNode).forEach(frontier::push);
+    } else {
+      frontier.add(startNode);
+    }
     while (!frontier.isEmpty()) {
       final DFSNode<T> current = frontier.pop();
       if (current.equals(endNode)) {
@@ -28,7 +36,11 @@ public class DFS<T> {
       if (closed.contains(current)) {
         continue;
       }
-      neighborsGetter.apply(current.data()).stream().map(DFS::node).peek(n -> n.parent = current).forEach(frontier::push);
+      neighborsGetter.apply(current.data()).stream()
+          .map(DFS::node)
+          .filter(n -> !Objects.equals(n, current.parent))
+          .peek(n -> n.parent = current)
+          .forEach(frontier::add);
       closed.add(current);
     }
     throw new RuntimeException("No solution found");

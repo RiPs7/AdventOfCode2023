@@ -14,13 +14,21 @@ import java.util.function.Function;
 public class BFS<T> {
 
   public List<T> run(final T start, final T end, final Function<T, List<T>> neighborsGetter) {
+    return run(start, end, neighborsGetter, false);
+  }
+
+  public List<T> run(final T start, final T end, final Function<T, List<T>> neighborsGetter, final boolean isStartSameAsEnd) {
     final Queue<BFSNode<T>> frontier = new ArrayDeque<>();
     final Set<BFSNode<T>> closed = new HashSet<>();
 
     final BFSNode<T> startNode = node(start);
     final BFSNode<T> endNode = node(end);
 
-    frontier.add(startNode);
+    if (isStartSameAsEnd) {
+      neighborsGetter.apply(start).stream().map(BFS::node).peek(n -> n.parent = startNode).forEach(frontier::add);
+    } else {
+      frontier.add(startNode);
+    }
     while (!frontier.isEmpty()) {
       final BFSNode<T> current = frontier.poll();
       if (current.equals(endNode)) {
@@ -29,7 +37,11 @@ public class BFS<T> {
       if (closed.contains(current)) {
         continue;
       }
-      neighborsGetter.apply(current.data()).stream().map(BFS::node).peek(n -> n.parent = current).forEach(frontier::add);
+      neighborsGetter.apply(current.data()).stream()
+          .map(BFS::node)
+          .filter(n -> !Objects.equals(n, current.parent))
+          .peek(n -> n.parent = current)
+          .forEach(frontier::add);
       closed.add(current);
     }
     throw new RuntimeException("No solution found");
