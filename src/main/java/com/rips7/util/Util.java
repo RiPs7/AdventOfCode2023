@@ -2,23 +2,18 @@ package com.rips7.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @SuppressWarnings("unused")
 public class Util {
-
-  public record Vector2D<T>(T x, T y) {
-    public static <T> Vector2D<T> of(T x, T y) {
-      return new Vector2D<>(x, y);
-    }
-  }
-
-  public record Vector3D<T>(T x, T y, T z) {}
 
   public enum AnsiColor {
     RESET("\u001B[0m"),
@@ -49,6 +44,17 @@ public class Util {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  @SafeVarargs
+  public static <T> List<List<T>> zip(List<T>... lists) {
+    final int zipSize = Arrays.stream(lists)
+        .map(List::size)
+        .min(Integer::compareTo)
+        .orElse(0);
+    return IntStream.range(0, zipSize)
+        .mapToObj(i -> Arrays.stream(lists).map(l -> l.get(i)).toList())
+        .toList();
   }
 
   public static <T> T lastElement(final List<T> list) {
@@ -87,6 +93,10 @@ public class Util {
     System.out.printf("%s%s%s", col, text, AnsiColor.RESET);
   }
 
+  public static void loop2D(final int rows, final int cols, final BiConsumer<Integer, Integer> cb) {
+    IntStream.range(0, rows).forEach(r -> IntStream.range(0, cols).forEach(c -> cb.accept(r, c)));
+  }
+
   public static <T> void print2DArray(final T[][] arr) {
     print2DArray(arr, T::toString);
   }
@@ -97,6 +107,45 @@ public class Util {
             .map(stringifier)
             .collect(Collectors.joining()))
         .collect(Collectors.joining("\n")));
+  }
+
+  @SuppressWarnings("unchecked")
+  public static <T> T[] newGenericArray(final Class<T> clazz, final int m) {
+    return (T[]) Array.newInstance(clazz, m);
+  }
+
+  @SuppressWarnings("unchecked")
+  public static <T> T[][] newGeneric2DArray(final Class<T> clazz, final int m, final int n) {
+    return (T[][]) Array.newInstance(clazz, m, n);
+  }
+
+  public static <T> T[] slice(final Class<T> clazz, final T[] arr, final int start, final int end) {
+    return Arrays.stream(arr, start, end).toArray(size -> newGenericArray(clazz, size));
+  }
+
+  public static <T> T[][] slice2D(final Class<T> clazz, final T[][] arr, final int start, final int end) {
+    return Arrays.stream(arr, start, end).toArray(size -> newGeneric2DArray(clazz, size, arr[0].length));
+  }
+
+  public static <T> T[][] invert2D(final Class<T> clazz, final T[][] arr) {
+    return IntStream.range(0, arr.length)
+        .mapToObj(i -> arr.length - i - 1)
+        .map(i -> arr[i])
+        .toArray(size -> newGeneric2DArray(clazz, size, arr[0].length));
+  }
+
+  public static <T> boolean equal2D(final T[][] arr1, final T[][] arr2) {
+    if (arr1.length != arr2.length || arr1[0].length != arr2[0].length) {
+      return false;
+    }
+    for (int i = 0; i < arr1.length; i++) {
+      for (int j = 0; j < arr1[0].length; j++) {
+        if (!Objects.equals(arr1[i][j], arr2[i][j])) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   public record TimedResult<T>(T res, String timeInfo) {}
