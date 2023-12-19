@@ -46,6 +46,10 @@ public class Util {
     }
   }
 
+  public static boolean isBlank(final String input) {
+    return input == null || input.length() == 0;
+  }
+
   @SafeVarargs
   public static <T> List<List<T>> zip(List<T>... lists) {
     final int zipSize = Arrays.stream(lists)
