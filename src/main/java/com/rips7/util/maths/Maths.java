@@ -24,6 +24,14 @@ public class Maths {
     return (int) Math.floor(d);
   }
 
+  public static boolean inBetween(final double toCheck, final double start, final double end) {
+    return start <= toCheck && toCheck <= end;
+  }
+
+  public static boolean inBetweenStrict(final double toCheck, final double start, final double end) {
+    return start < toCheck && toCheck < end;
+  }
+
   public static long lcm(final List<Long> numbers) {
     return numbers.stream().reduce(1L, (accum, curr) -> (accum * curr) / gcd(accum, curr));
   }
