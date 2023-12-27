@@ -87,6 +87,32 @@ public class Util {
     return 0 <= row && row < rows && 0 <= col && col < cols;
   }
 
+  public static long findLoopArea(final List<Vector2D<Integer>> loop) {
+    // Shoelace formula for area inside the loop
+    long innerAreaSum = 0;
+    for (int i = 0; i < loop.size() - 1; i++) {
+      final Vector2D<Integer> currentPoint = loop.get(i);
+      final Vector2D<Integer> nextPoint = loop.get((i + 1));
+      innerAreaSum += ((long) currentPoint.x() * nextPoint.y()) - ((long) nextPoint.x() * currentPoint.y());
+    }
+    final long innerArea = Math.abs(innerAreaSum) / 2;
+
+    // In a grid, the shoelace formula calculates the area from the midpoint of the cells around the perimeter.
+    // We need to add the number of cells along the perimeter halved
+    long loopPerimeter = 0;
+    for (int i = 0; i < loop.size() - 1; i++) {
+      final Vector2D<Integer> currentPoint = loop.get(i);
+      final Vector2D<Integer> nextPoint = loop.get((i + 1));
+      if (currentPoint.x().equals(nextPoint.x())) {
+        loopPerimeter += Math.abs(currentPoint.y() - nextPoint.y());
+      } else if (currentPoint.y().equals(nextPoint.y())) {
+        loopPerimeter += Math.abs(currentPoint.x() - nextPoint.x());
+      }
+    }
+
+    return innerArea + loopPerimeter / 2 - 1;
+  }
+
   public static <T> TimedResult<T> time(final Callable<T> runnable) {
     final long start = System.currentTimeMillis();
     final T res;
