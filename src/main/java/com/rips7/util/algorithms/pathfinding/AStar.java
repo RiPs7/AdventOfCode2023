@@ -58,7 +58,7 @@ public class AStar<T> {
   }
 
   private List<T> backtrack(final AStarNode<T> end) {
-    List<AStarNode<T>> path = new ArrayList<>();
+    final List<AStarNode<T>> path = new ArrayList<>();
     AStarNode<T> current = end;
     while (current != null) {
       path.add(current);

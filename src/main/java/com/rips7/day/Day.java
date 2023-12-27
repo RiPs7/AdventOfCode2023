@@ -29,7 +29,12 @@ public interface Day<T> {
   }
 
   default String loadInput() {
-    return Util.readResource("/%s/input".formatted(this.getClass().getSimpleName().toLowerCase()));
+    final String inputFilename = "/%s/input".formatted(this.getClass().getSimpleName().toLowerCase());
+    try {
+      return Util.readResource(inputFilename);
+    } catch (final NullPointerException e) {
+      throw new RuntimeException("No input file '%s'".formatted(inputFilename));
+    }
   }
 
 }

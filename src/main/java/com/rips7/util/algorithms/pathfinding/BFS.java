@@ -52,7 +52,7 @@ public class BFS<T> {
   }
 
   private List<T> backtrack(final BFSNode<T> end) {
-    List<BFSNode<T>> path = new ArrayList<>();
+    final List<BFSNode<T>> path = new ArrayList<>();
     BFSNode<T> current = end;
     while (current != null) {
       path.add(current);

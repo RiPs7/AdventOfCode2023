@@ -1,6 +1,8 @@
 package com.rips7.util.maths;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
 
 import static com.rips7.util.Util.loop2D;
 import static com.rips7.util.Util.newGeneric2DArray;
@@ -12,9 +14,25 @@ public class Maths {
     public static <T> Vector2D<T> of(final T x, final T y) {
       return new Vector2D<>(x, y);
     }
+
+    public static <T> Vector2D<T> add(final Vector2D<T> v1, final Vector2D<T> v2, final BiFunction<T, T, T> adder) {
+      return Vector2D.of(adder.apply(v1.x, v2.x), adder.apply(v1.y, v2.y));
+    }
   }
 
   public record Vector3D<T>(T x, T y, T z) {}
+
+  public static Float min(final Float... numbers) {
+    return Arrays.stream(numbers)
+        .reduce(Math::min)
+        .orElse(0.0f);
+  }
+
+  public static Float max(final Float... numbers) {
+    return Arrays.stream(numbers)
+        .reduce(Math::max)
+        .orElse(0.0f);
+  }
 
   public static int ceil(final double d) {
     return (int) Math.ceil(d);

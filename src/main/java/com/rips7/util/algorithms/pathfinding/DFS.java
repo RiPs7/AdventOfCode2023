@@ -51,7 +51,7 @@ public class DFS<T> {
   }
 
   private List<T> backtrack(final DFSNode<T> end) {
-    List<DFSNode<T>> path = new ArrayList<>();
+    final List<DFSNode<T>> path = new ArrayList<>();
     DFSNode<T> current = end;
     while (current != null) {
       path.add(current);

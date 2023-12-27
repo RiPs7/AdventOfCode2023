@@ -1,5 +1,7 @@
 package com.rips7.util;
 
+import com.rips7.util.maths.Maths.Vector2D;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
@@ -67,6 +69,22 @@ public class Util {
 
   public static <T> T firstElement(final List<T> list) {
     return list.isEmpty() ? null : list.get(0);
+  }
+
+  public static <T> boolean isWithinGrid(final Vector2D<Integer> pos, final T[][] grid) {
+    return isWithinGrid(pos.x(), pos.y(), grid.length, grid[0].length);
+  }
+
+  public static boolean isWithinGrid(final Vector2D<Integer> pos, final int rows, final int cols) {
+    return isWithinGrid(pos.x(), pos.y(), rows, cols);
+  }
+
+  public static <T> boolean isWithinGrid(final int row, final int col, final T[][] grid) {
+    return isWithinGrid(row, col, grid.length, grid[0].length);
+  }
+
+  public static boolean isWithinGrid(final int row, final int col, final int rows, final int cols) {
+    return 0 <= row && row < rows && 0 <= col && col < cols;
   }
 
   public static <T> TimedResult<T> time(final Callable<T> runnable) {
