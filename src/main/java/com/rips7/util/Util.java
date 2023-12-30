@@ -126,13 +126,16 @@ public class Util {
     if (diff < 1_000) { // less than a second
       return new TimedResult<>(res, "Took %s ms".formatted(diff));
     } else if (diff < 60_000) { // less than a minute
-      final long seconds = diff / 1_000;
-      final long millis = diff - (seconds * 1_000);
+      long millis = diff;
+      final long seconds = millis / 1_000;
+      millis -= seconds * 1_000;
       return new TimedResult<>(res, "Took %s sec, %s ms".formatted(seconds, millis));
     } else {
-      final long minutes = diff / 60_000;
-      final long seconds = diff - (minutes * 60_000);
-      final long millis = diff - seconds * 1_000;
+      long millis = diff;
+      final long minutes = millis / 60_000;
+      millis -= minutes * 60_000;
+      final long seconds = millis / 1_000;
+      millis -= seconds * 1_000;
       return new TimedResult<>(res, "Took %s min, %s sec, %s ms".formatted(minutes, seconds, millis));
     }
   }

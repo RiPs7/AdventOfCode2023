@@ -12,13 +12,24 @@ import java.util.stream.IntStream;
 public class Combinatorics {
 
   public record Pair<L, R>(L left, R right) {
-    public static <L, R> Pair<L,R> of(L left, R right) {
+    public static <L, R> Pair<L,R> of(final L left, final R right) {
       return new Pair<>(left, right);
     }
 
     @Override
     public String toString() {
       return "[%s,%s]".formatted(left, right);
+    }
+  }
+
+  public record Triplet<F, S, T>(F first, S second, T third) {
+    public static <F, S, T> Triplet<F, S, T> of(final F first, final S second, final T third) {
+      return new Triplet<>(first, second, third);
+    }
+
+    @Override
+    public String toString() {
+      return "[%s,%s,%s]".formatted(first, second, third);
     }
   }
 
