@@ -71,6 +71,10 @@ public class Util {
     return list.isEmpty() ? null : list.get(0);
   }
 
+  public static <T> void enumerate(final List<T> list, final BiConsumer<Integer, T> callback) {
+    IntStream.range(0, list.size()).forEach(i -> callback.accept(i, list.get(i)));
+  }
+
   public static <T> boolean isWithinGrid(final Vector2D<Integer> pos, final T[][] grid) {
     return isWithinGrid(pos.x(), pos.y(), grid.length, grid[0].length);
   }

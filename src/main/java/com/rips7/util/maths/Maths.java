@@ -20,7 +20,15 @@ public class Maths {
     }
   }
 
-  public record Vector3D<T>(T x, T y, T z) {}
+  public record Vector3D<T>(T x, T y, T z) {
+    public static <T> Vector3D<T> of(final T x, final T y, final T z) {
+      return new Vector3D<>(x, y, z);
+    }
+
+    public static <T> Vector3D<T> add(final Vector3D<T> v1, final Vector3D<T> v2, final BiFunction<T, T, T> adder) {
+      return Vector3D.of(adder.apply(v1.x, v2.x), adder.apply(v1.y, v2.y), adder.apply(v1.z, v2.z));
+    }
+  }
 
   public static Float min(final Float... numbers) {
     return Arrays.stream(numbers)
