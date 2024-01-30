@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -37,6 +38,41 @@ public class Util {
     @Override
     public String toString() {
       return code;
+    }
+  }
+
+  public enum Offset {
+    UP(Vector2D.of(-1, 0)),
+    RIGHT(Vector2D.of(0, 1)),
+    DOWN(Vector2D.of(1, 0)),
+    LEFT(Vector2D.of(0, -1));
+
+    private final Vector2D<Integer> value;
+
+    Offset(final Vector2D<Integer> value) {
+      this.value = value;
+    }
+
+    public static List<Offset> getOffsets() {
+      return Arrays.stream(values()).toList();
+    }
+  }
+
+  public record Position(Vector2D<Integer> value) {
+    public static Position of(final int i, final int j) {
+      return new Position(Vector2D.of(i, j));
+    }
+
+    public Position apply(final Offset offset) {
+      return new Position(Vector2D.add(this.value, offset.value, Integer::sum));
+    }
+
+    public int x() {
+      return value.x();
+    }
+
+    public int y() {
+      return value.y();
     }
   }
 
@@ -73,6 +109,14 @@ public class Util {
 
   public static <T> void enumerate(final List<T> list, final BiConsumer<Integer, T> callback) {
     IntStream.range(0, list.size()).forEach(i -> callback.accept(i, list.get(i)));
+  }
+
+  public static <T> boolean isWithinGrid(final Position pos, final T[][] grid) {
+    return isWithinGrid(pos.x(), pos.y(), grid.length, grid[0].length);
+  }
+
+  public static boolean isWithinGrid(final Position pos, final int rows, final int cols) {
+    return isWithinGrid(pos.x(), pos.y(), rows, cols);
   }
 
   public static <T> boolean isWithinGrid(final Vector2D<Integer> pos, final T[][] grid) {
@@ -150,6 +194,10 @@ public class Util {
 
   public static void loop2D(final int rows, final int cols, final BiConsumer<Integer, Integer> cb) {
     IntStream.range(0, rows).forEach(r -> IntStream.range(0, cols).forEach(c -> cb.accept(r, c)));
+  }
+
+  public static <T> void loop2D(final T[][] arr, final Consumer<T> cb) {
+    IntStream.range(0, arr.length).forEach(r -> IntStream.range(0, arr[r].length).forEach(c -> cb.accept(arr[r][c])));
   }
 
   public static <T> void print2DArray(final T[][] arr) {
