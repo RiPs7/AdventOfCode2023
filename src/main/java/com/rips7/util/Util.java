@@ -14,6 +14,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @SuppressWarnings("unused")
 public class Util {
@@ -82,6 +83,10 @@ public class Util {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  public static Stream<String> lines(final String input) {
+    return Arrays.stream(input.split("\n"));
   }
 
   public static boolean isBlank(final String input) {

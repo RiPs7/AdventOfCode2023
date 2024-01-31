@@ -1,5 +1,7 @@
 package com.rips7.util.maths;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -50,6 +52,14 @@ public class Maths {
     return (int) Math.floor(d);
   }
 
+  public static boolean inBetween(final BigDecimal toCheck, final BigDecimal start, final BigDecimal end) {
+    return toCheck.compareTo(start) >= 0 && toCheck.compareTo(end) <= 0;
+  }
+
+  public static boolean inBetweenStrict(final BigDecimal toCheck, final BigDecimal start, final BigDecimal end) {
+    return toCheck.compareTo(start) > 0 && toCheck.compareTo(end) < 0;
+  }
+
   public static boolean inBetween(final double toCheck, final double start, final double end) {
     return start <= toCheck && toCheck <= end;
   }
@@ -76,6 +86,26 @@ public class Maths {
     final T[][] result = newGeneric2DArray(clazz, arr[0].length, arr.length);
     loop2D(result.length, result[0].length, (r, c) -> result[r][c] = arr[c][r]);
     return result;
+  }
+
+  public static void solveGauss(final BigDecimal[][] m) {
+    for (int row = 0; row < m.length; row++) {
+      // 1. set c[row][row] equal to 1
+      final BigDecimal factor = m[row][row];
+      for (int col = 0; col < m[row].length; col++) {
+        m[row][col] = m[row][col].divide(factor, 100, RoundingMode.HALF_EVEN);
+      }
+
+      // 2. set c[row][row2] equal to 0
+      for (int row2 = 0; row2 < m.length; row2++) {
+        if (row2 != row) {
+          BigDecimal factor2 = m[row2][row].negate();
+          for (int col = 0; col < m[row2].length; col++) {
+            m[row2][col] = m[row2][col].add(factor2.multiply(m[row][col]));
+          }
+        }
+      }
+    }
   }
 
 }
