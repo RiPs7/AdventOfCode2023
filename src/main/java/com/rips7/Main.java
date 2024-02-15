@@ -1,11 +1,11 @@
 package com.rips7;
 
 import com.rips7.day.Day;
-import com.rips7.day.Day24;
+import com.rips7.day.Day25;
 
 public class Main {
 
-  private static final Day<?> DAY = new Day24();
+  private static final Day<?> DAY = new Day25();
 
   public static void main(String[] args) {
     DAY.run();

@@ -112,6 +112,10 @@ public class Util {
     return list.isEmpty() ? null : list.get(0);
   }
 
+  public static <T> T randomElement(final List<T> list) {
+    return list.get((int) Math.floor(Math.random() * list.size()));
+  }
+
   public static <T> void enumerate(final List<T> list, final BiConsumer<Integer, T> callback) {
     IntStream.range(0, list.size()).forEach(i -> callback.accept(i, list.get(i)));
   }
