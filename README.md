@@ -1,6 +1,9 @@
 # [Advent of Code 2023](https://adventofcode.com/2023)
 
 This repo contains the solutions to the days of Advent Of Code 2023.
+
+The `Main` class will run all days at once. Execution takes about `1 minute` for all days.
+
 Every solved puzzle will give a star 🌟.
 
 | Day (Advent Of Code)                           | Description                                       | Solution                                             | Stars |
